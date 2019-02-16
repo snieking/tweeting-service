@@ -67,7 +67,10 @@
         <artifactId>docker-maven-plugin</artifactId>
         <version>1.2.0</version>
         <configuration>
-          <imageName>${project.artifactId}</imageName>
+          <imageName>snieking/${project.artifactId}</imageName>
+          <imageTags>
+            <imageTag>latest</imageTag>
+          </imageTags>
           <dockerDirectory>docker</dockerDirectory>
           <resources>
            <resource>
@@ -86,17 +89,6 @@
               <goal>build</goal>
             </goals>
           </execution>
-          <execution>
-            <id>tag-image</id>
-            <phase>package</phase>
-            <goals>
-              <goal>tag</goal>
-            </goals>
-            <configuration>
-              <image>${project.artifactId}:latest</image>
-              <newName>${project.artifactId}:${project.version}</newName>
-            </configuration>
-          </execution>
 
           <execution>
             <id>push-image</id>
@@ -104,9 +96,6 @@
             <goals>
               <goal>push</goal>
             </goals>
-            <configuration>
-              <imageName>snieking/${project.artifactId}</imageName>
-            </configuration>
           </execution>
         </executions>
       </plugin>
