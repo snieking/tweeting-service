@@ -1,0 +1,6 @@
+---
+applications:
+  - name: tweeting-service
+    memory: 128M
+    docker:
+      image: snieking/tweeting-service
