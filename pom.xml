@@ -64,14 +64,15 @@
       </plugin>
       <plugin>
         <groupId>com.spotify</groupId>
-        <artifactId>docker-maven-plugin</artifactId>
-        <version>1.2.0</version>
+        <artifactId>dockerfile-maven-plugin</artifactId>
+        <version>1.3.7</version>
         <configuration>
           <imageName>snieking/${project.artifactId}</imageName>
           <imageTags>
             <imageTag>latest</imageTag>
           </imageTags>
           <dockerDirectory>docker</dockerDirectory>
+          <repository>snieking/${project.artifactId}</repository>
           <resources>
            <resource>
              <targetPath>/</targetPath>
