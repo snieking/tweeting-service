@@ -7,6 +7,10 @@ before_install:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 deploy:
-  provider: script
-  script: "mvn deploy"
-  skip_cleanup: true
+   provider: cloudfoundry
+   username: "$CF_USERNAME"
+   password: "$CF_PASSWORD"
+   api: https://api.run.pivotal.io
+   organization: thecuriousdev
+   space: development
+   #manifest: manifest-staging.yml       # (optional)  Defaults to manifest.yml.
