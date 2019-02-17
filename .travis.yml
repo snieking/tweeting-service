@@ -11,6 +11,6 @@ deploy:
    username: "$CF_USERNAME"
    password: "$CF_PASSWORD"
    api: https://api.run.pivotal.io
-   organization: thecuriousdev
+   organization: thecuriousdev.org
    space: development
    #manifest: manifest-staging.yml       # (optional)  Defaults to manifest.yml.
