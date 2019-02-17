@@ -64,9 +64,10 @@
       </plugin>
 
       <plugin>
+      
         <groupId>com.spotify</groupId>
         <artifactId>dockerfile-maven-plugin</artifactId>
-        <version>1.3.7</version>
+        <version>1.3.6</version>
         <dependencies>
           <dependency>
             <groupId>javax.activation</groupId>
@@ -74,15 +75,6 @@
             <version>1.1.1</version>
           </dependency>
         </dependencies>
-        <executions>
-          <execution>
-            <id>default</id>
-            <goals>
-              <goal>build</goal>
-              <goal>push</goal>
-            </goals>
-          </execution>
-        </executions>
         <configuration>
           <repository>snieking/${project.artifactId}</repository>
           <tag>latest</tag>
@@ -90,6 +82,15 @@
             <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
           </buildArgs>
         </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>build</goal>
+              <goal>push</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
