@@ -55,7 +55,7 @@ public class TweetScheduler {
         log.info("New highest scored post for subReddit {} with {} points: {}", subReddit, postData.getScore(), postData);
       } else if (oldPost.equals(postData)) {
         oldPost.setScore(postData.getScore());
-        log.info("Updated previous highest scored post for subReddit with {} to {} points",
+        log.info("Updated previous highest scored post for subReddit {} with {} to {} points",
             subReddit, oldPost.getScore(), postData.getScore());
       }
     } catch (ExecutionException e) {
