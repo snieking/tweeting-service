@@ -20,6 +20,9 @@ import reactor.core.publisher.Flux;
 @EnableScheduling
 public class TweetScheduler {
 
+  public static final int ONE_SECOND = 1000;
+  public static final int ONE_MINUTE = 60;
+  public static final int ONE_HOUR = 60;
   private final WebClient webClient;
   private final Cache<SubReddit, PostData> redditCache;
 
@@ -32,8 +35,9 @@ public class TweetScheduler {
         .build();
   }
 
-  @Scheduled(fixedDelay = 600000)
+  @Scheduled(fixedDelay = ONE_SECOND * ONE_MINUTE * ONE_HOUR)
   public void checkAwwSubReddit() {
+    log.info("Scanning for new r/aww tweets");
     webClient.get()
         .uri("/aww/top/.json?count=1")
         .exchange()
@@ -57,6 +61,9 @@ public class TweetScheduler {
         oldPost.setScore(postData.getScore());
         log.info("Updated previous highest scored post for subReddit {} with {} to {} points",
             subReddit, oldPost.getScore(), postData.getScore());
+      } else {
+        log.info("New post with score [{}] wasn't higher than the prior top with score [{}]",
+            postData.getScore(), oldPost.getScore());
       }
     } catch (ExecutionException e) {
       log.warn("Error caching reddit response for subReddit: [{}] and post: [{}]", subReddit, postData, e);
