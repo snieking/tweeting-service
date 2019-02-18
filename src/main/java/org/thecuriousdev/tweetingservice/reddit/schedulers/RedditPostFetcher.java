@@ -1,7 +1,8 @@
-package org.thecuriousdev.tweetingservice.reddit.scheduler;
+package org.thecuriousdev.tweetingservice.reddit.schedulers;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,7 @@ import reactor.core.publisher.Flux;
 @Slf4j
 @Service
 @EnableScheduling
-public class TweetScheduler {
+public class RedditPostFetcher {
 
   public static final int ONE_SECOND = 1000;
   public static final int ONE_MINUTE = 60;
@@ -26,7 +27,7 @@ public class TweetScheduler {
   private final WebClient webClient;
   private final Cache<SubReddit, PostData> redditCache;
 
-  public TweetScheduler() {
+  public RedditPostFetcher() {
     webClient = WebClient.builder()
         .baseUrl("https://www.reddit.com/r")
         .build();
@@ -50,6 +51,11 @@ public class TweetScheduler {
         .subscribe(postData -> cacheRedditResponse(postData, SubReddit.AWW));
   }
 
+  public Optional<String> getAwwTweet() {
+    return Optional.ofNullable(redditCache.getIfPresent(SubReddit.AWW))
+        .map(this::buildTweet);
+  }
+
   private synchronized void cacheRedditResponse(PostData postData, SubReddit subReddit) {
     try {
       final PostData oldPost = redditCache.get(subReddit, () -> postData);
@@ -68,6 +74,16 @@ public class TweetScheduler {
     } catch (ExecutionException e) {
       log.warn("Error caching reddit response for subReddit: [{}] and post: [{}]", subReddit, postData, e);
     }
+  }
+
+  private String buildTweet(PostData postData) {
+    return new StringBuilder()
+        .append(postData.getTitle())
+        .append(" - ")
+        .append(postData.getUrl())
+        .append("\n\n")
+        .append(postData.getPermalink())
+        .toString();
   }
 
   enum SubReddit {
